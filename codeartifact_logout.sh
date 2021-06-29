@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # config
 REPOSITORY=dss
 DOMAIN=kraussmaffei
@@ -18,9 +21,5 @@ fi
 
 # twine
 if command -v twine &>/dev/null; then
-  unset TWINE_USERNAME
-  unset TWINE_PASSWORD
-  unset TWINE_REPOSITORY
-  unset TWINE_REPOSITORY_URL
-  unset TWINE_NON_INTERACTIVE
+  sed -i '/\[codeartifact\]/,/\[/ { /\[codeartifact\]/d; /\[/b; d }' ~/.pypirc
 fi
