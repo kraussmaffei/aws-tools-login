@@ -11,7 +11,7 @@ function usage()
 
    optional arguments:
      -h, --help                   show this help message and exit
-     -p, --profile AWS_PROFILE    The aws profile to use for logging in to codeartifact.
+     -p, --profile AWS_PROFILE    The aws profile to use for logging in to aws
      -d, --debug                  run in debug mode
      --dry-run                    do a dry run, dont change any files
 
@@ -68,6 +68,7 @@ CODEARTIFACT_USER=aws
 
 # configure
 if [ "$dryrun" = true ] ; then
+  aws $debug --profile $profile --region $REGION ecr get-login-password
   echo "Login successful but no files configured. Run without dry-run to configure your tools.";
 else
   # poetry
@@ -85,5 +86,10 @@ else
   # twine
   if command -v twine &>/dev/null; then
       aws $debug --profile $profile --region eu-central-1 codeartifact login --tool twine --domain $DOMAIN --domain-owner $DOMAIN_OWNER --repository $REPOSITORY
+  fi
+
+  # docker
+  if command -v docker &>/dev/null; then
+        aws $debug --profile $profile --region $REGION ecr get-login-password | docker $debug login --username AWS --password-stdin $DOMAIN_OWNER.dkr.ecr.$REGION.amazonaws.com
   fi
 fi

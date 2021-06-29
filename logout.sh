@@ -23,3 +23,8 @@ fi
 if command -v twine &>/dev/null; then
   sed -i '/\[codeartifact\]/,/\[/ { /\[codeartifact\]/d; /\[/b; d }' ~/.pypirc
 fi
+
+# docker
+if command -v docker &>/dev/null; then
+  docker logout "$DOMAIN_OWNER.dkr.ecr.$REGION.amazonaws.com"
+fi
