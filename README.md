@@ -1,2 +1,2 @@
 # codeartifact_login
-A shell script and github action to log into kraussmaffei codeartifact
+A shell script and github action to login / logout kraussmaffei codeartifact
