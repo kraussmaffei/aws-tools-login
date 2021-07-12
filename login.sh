@@ -62,22 +62,13 @@ then
 fi
 
 # login
-CODEARTIFACT_REPOSITORY_URL=$(aws $debug --profile $profile --region eu-central-1 codeartifact get-repository-endpoint --domain $DOMAIN --domain-owner $DOMAIN_OWNER --repository $REPOSITORY --format pypi --query repositoryEndpoint --output text)
 CODEARTIFACT_AUTH_TOKEN=$(aws $debug --profile $profile --region eu-central-1 codeartifact get-authorization-token --domain $DOMAIN --domain-owner $DOMAIN_OWNER --query authorizationToken --output text)
-CODEARTIFACT_USER=aws
 
 # configure
 if [ "$dryrun" = true ] ; then
   aws $debug --profile $profile --region $REGION ecr get-login-password
   echo "Login successful but no files configured. Run without dry-run to configure your tools.";
 else
-  # poetry
-  if command -v poetry &>/dev/null; then
-    poetry $verbose config http-basic.$REPOSITORY $CODEARTIFACT_USER $CODEARTIFACT_AUTH_TOKEN
-    poetry $verbose config repositories.$REPOSITORY $CODEARTIFACT_REPOSITORY_URL
-    poetry $verbose config pypi-token.$REPOSITORY $CODEARTIFACT_AUTH_TOKEN
-  fi
-
   # pip
   if command -v pip &>/dev/null; then
     pip $verbose config set global.index-url https://aws:$CODEARTIFACT_AUTH_TOKEN@$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/$REPOSITORY/simple/
