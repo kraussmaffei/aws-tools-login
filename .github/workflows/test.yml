@@ -15,7 +15,15 @@ jobs:
         with:
           account: 304998364617
           region: eu-central-1
-          aws-tool: codeartifact-pypi
+          aws-tool: codeartifact-twine
+          codeartifact-repository: dss
+          codeartifact-domain: kraussmaffei
+      - name: Local Action
+        uses: ./
+        with:
+          account: 304998364617
+          region: eu-central-1
+          aws-tool: codeartifact-pip
           codeartifact-repository: dss
           codeartifact-domain: kraussmaffei
       - run: pip install kmhelper

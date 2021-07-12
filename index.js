@@ -10,8 +10,11 @@ async function run() {
   const codeartifactDomain = core.getInput('codeartifact-domain', { required: false });
 
   switch(awsTool) {
-    case 'codeartifact-pypi':
-      codeartifact(account, region, codeartifactDomain, codeartifactRepository, 'pypi');
+    case 'codeartifact-pip':
+      codeartifact(account, region, codeartifactDomain, codeartifactRepository, 'pip');
+      break;
+    case 'codeartifact-twine':
+      codeartifact(account, region, codeartifactDomain, codeartifactRepository, 'twine');
       break;
   }
 
@@ -24,21 +27,21 @@ async function codeartifact(account, region, codeartifactDomain, codeartifactRep
         domainOwner: account,
         durationSeconds: 0
     });
-
-    core.debug(`AWS CodeArtifact Login(Auth) ${account}-${region}-${codeartifactDomain}-${codeartifactRepository}`);
-
     const response = await client.send(authCommand);
     const authToken = response.authorizationToken;
     if (response.authorizationToken === undefined) {
         throw Error(`AWS CodeArtifact Authentication Failed: ${response.$metadata.httpStatusCode} (${response.$metadata.requestId})`);
     }
-
     switch(type) {
-        case 'pypi':
+        case 'pip':
+            core.debug(`AWS CodeArtifact Login(Auth) ${account}-${region}-${codeartifactDomain}-${codeartifactRepository}`);
             var indexUrl = `https://aws:${authToken}@${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`
             var extraIndexUrl = `https://aws:${authToken}@${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/dss-upstream/simple/`
             await exec.exec('pip', ['config', 'set', 'global.index-url', indexUrl], {silent: true});
             await exec.exec('pip', ['config', 'set', 'global.extra-index-url', extraIndexUrl], {silent: true});
+            break;
+        case 'twine':
+            await exec.exec('aws', ['--region', 'eu-central-1', 'codeartifact', 'login', '--tool', 'twine', '--domain', codeartifactDomain, '--domain-owner', account, '--repository', codeartifactRepository], {silent: false});
             break;
     }
 }
