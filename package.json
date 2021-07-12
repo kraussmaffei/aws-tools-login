@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint **.js",
-    "package": "ncc build index.js -o dist"
+    "package": "ncc build index.js -o dist && ncc build cleanup.js -o dist/cleanup"
   },
   "author": "Kraussmaffei Technologies",
   "license": "MIT",

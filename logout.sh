@@ -17,6 +17,7 @@ fi
 # pip
 if command -v pip &>/dev/null; then
   pip config unset global.index-url
+  pip config unset global.extra-index-url
 fi
 
 # twine
