@@ -1,0 +1,29 @@
+name: AWS tools login
+description: Log into several aws tools. (e.g. codeartifact, ecr ...)
+
+inputs:
+  account:
+    description: |
+      The aws account id.
+    required: true
+  region:
+    description: |
+      The aws region.
+    required: true
+  aws-tool:
+    description: |
+      The aws tool to log into. One of [ codeartifact-pypi, ecr ]
+    required: true
+  codeartifact-repository:
+    description: |
+      The codeartifact repository name.
+    required: false
+  codeartifact-domain:
+    description: |
+      The codeartifact domain name.
+    required: false
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+  post: 'dist/cleanup/index.js'

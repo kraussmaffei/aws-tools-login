@@ -1,0 +1,23 @@
+{
+  "name": "create-deployment",
+  "version": "1.0.0",
+  "description": "Create a github deployment.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint **.js",
+    "package": "ncc build index.js -o dist"
+  },
+  "author": "Kraussmaffei Technologies",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.2.7",
+    "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0",
+    "@aws-sdk/client-codeartifact": "^3.14.0",
+    "aws-sdk": "^2.902.0"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "^0.22.3",
+    "eslint": "^7.30.0"
+  }
+}

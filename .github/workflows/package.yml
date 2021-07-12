@@ -1,0 +1,22 @@
+on:
+  push:
+    branches: [ main ]
+
+name: Lint and Package
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Package
+        run: |
+          npm ci
+          npm run lint
+          npm run package
+      - name: Commit
+        run: |
+          git config --global user.name "GitHub Actions"
+          git add dist/
+          git commit -m "chore: Update dist" || echo "No changes to commit"
+          git push origin HEAD:main

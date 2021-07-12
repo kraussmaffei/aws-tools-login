@@ -119,3 +119,6 @@ Pipfile.lock
 # vscode
 .vscode/
 .vscode/*
+
+# whitelist
+!dist
