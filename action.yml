@@ -12,15 +12,15 @@ inputs:
     required: true
   aws-tool:
     description: |
-      The aws tool to log into. One of [ codeartifact-pypi, ecr ]
+      The aws tool to log into. One of [ codeartifact-pip, codeartifact-twine, ecr ]
     required: true
   codeartifact-repository:
     description: |
-      The codeartifact repository name.
+      The codeartifact repository name. Required when logging into codeartifact.
     required: false
   codeartifact-domain:
     description: |
-      The codeartifact domain name.
+      The codeartifact domain name. Required when logging into codeartifact.
     required: false
 
 runs:
