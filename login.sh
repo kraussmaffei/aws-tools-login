@@ -73,15 +73,21 @@ else
   if command -v pip &>/dev/null; then
     pip $verbose config set global.index-url https://aws:$CODEARTIFACT_AUTH_TOKEN@$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/$REPOSITORY/simple/
     pip $verbose config set global.extra-index-url https://aws:$CODEARTIFACT_AUTH_TOKEN@$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/dss-upstream/simple/
+  else
+    echo "Pip not found and therefore not configured."
   fi
 
   # twine
   if command -v twine &>/dev/null; then
-      aws $debug --profile $profile --region eu-central-1 codeartifact login --tool twine --domain $DOMAIN --domain-owner $DOMAIN_OWNER --repository $REPOSITORY
+    aws $debug --profile $profile --region eu-central-1 codeartifact login --tool twine --domain $DOMAIN --domain-owner $DOMAIN_OWNER --repository $REPOSITORY
+  else
+    echo "Twine not found and therefore not configured."
   fi
 
   # docker
   if command -v docker &>/dev/null; then
-        aws $debug --profile $profile --region $REGION ecr get-login-password | docker $debug login --username AWS --password-stdin $DOMAIN_OWNER.dkr.ecr.$REGION.amazonaws.com
+    aws $debug --profile $profile --region $REGION ecr get-login-password | docker $debug login --username AWS --password-stdin $DOMAIN_OWNER.dkr.ecr.$REGION.amazonaws.com
+  else
+    echo "Docker not found and therefore not logged in."
   fi
 fi
