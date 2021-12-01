@@ -28,6 +28,8 @@ debug=""
 verbose=""
 dryrun=false
 profile=""
+bold=$(tput bold)
+normal=$(tput sgr0)
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -71,6 +73,7 @@ if [ "$dryrun" = true ] ; then
 else
   # pip
   if command -v pip &>/dev/null; then
+    echo "${bold}Configuring pip...${normal}"
     pip $verbose config set global.index-url https://aws:$CODEARTIFACT_AUTH_TOKEN@$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/$REPOSITORY/simple/
     pip $verbose config set global.extra-index-url https://aws:$CODEARTIFACT_AUTH_TOKEN@$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/dss-upstream/simple/
   else
@@ -79,6 +82,7 @@ else
 
   # twine
   if command -v twine &>/dev/null; then
+    echo "${bold}Configuring twine...${normal}"
     aws $debug --profile $profile --region eu-central-1 codeartifact login --tool twine --domain $DOMAIN --domain-owner $DOMAIN_OWNER --repository $REPOSITORY
   else
     echo "Twine not found and therefore not configured."
@@ -86,8 +90,22 @@ else
 
   # docker
   if command -v docker &>/dev/null; then
+    echo "${bold}Logging in to ecr...${normal}"
     aws $debug --profile $profile --region $REGION ecr get-login-password | docker $debug login --username AWS --password-stdin $DOMAIN_OWNER.dkr.ecr.$REGION.amazonaws.com
   else
-    echo "Docker not found and therefore not logged in."
+    echo "Docker not found and therefore not logged in to ecr."
+  fi
+
+  # poetry
+  if command -v poetry &>/dev/null; then
+    echo "${bold}Configuring poetry...${normal}"
+                                    
+    poetry config repositories.dss "https://$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/$REPOSITORY/simple/" \
+        && poetry config http-basic.dss aws $CODEARTIFACT_AUTH_TOKEN
+
+    poetry config repositories.dss-upstream "https://$DOMAIN-$DOMAIN_OWNER.d.codeartifact.$REGION.amazonaws.com/pypi/dss-upstream/simple/" \
+        && poetry config http-basic.dss-upstream aws $CODEARTIFACT_AUTH_TOKEN
+  else
+    echo "Poetry not installed. Installation instructions can be found on https://python-poetry.org/docs/#installation"
   fi
 fi
