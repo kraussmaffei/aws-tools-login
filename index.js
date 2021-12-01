@@ -36,7 +36,7 @@ async function codeartifact(account, region, codeartifactDomain, codeartifactRep
         throw Error(`AWS CodeArtifact Authentication Failed: ${response.$metadata.httpStatusCode} (${response.$metadata.requestId})`);
     }
     const indexUrl =`https://${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`;
-    const extraIndexUrl = `https://${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`;
+    const extraIndexUrl = `https://${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/dss-upstream/simple/`;
 
     switch(type) {
         case 'pip':
