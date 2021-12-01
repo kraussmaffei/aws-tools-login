@@ -3004,8 +3004,8 @@ async function codeartifact(account, region, codeartifactDomain, codeartifactRep
     if (response.authorizationToken === undefined) {
         throw Error(`AWS CodeArtifact Authentication Failed: ${response.$metadata.httpStatusCode} (${response.$metadata.requestId})`);
     }
-    const indexUrl =`https://${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`;
-    const extraIndexUrl = `https://${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/dss-upstream/simple/`;
+    const indexUrl =`${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`;
+    const extraIndexUrl = `${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/dss-upstream/simple/`;
 
     switch(type) {
         case 'pip':
@@ -3017,10 +3017,10 @@ async function codeartifact(account, region, codeartifactDomain, codeartifactRep
             await exec.exec('aws', ['--region', 'eu-central-1', 'codeartifact', 'login', '--tool', 'twine', '--domain', codeartifactDomain, '--domain-owner', account, '--repository', codeartifactRepository], {silent: false});
             break;
         case 'poetry':
-            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `${indexUrl}`], {silent: false});
+            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `https://${indexUrl}`], {silent: false});
             await exec.exec('poetry', ['config', `http-basic.${codeartifactRepository}`, 'aws', `${authToken}`], {silent: false});
 
-            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `${extraIndexUrl}`], {silent: false});
+            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `https://${extraIndexUrl}`], {silent: false});
             await exec.exec('poetry', ['config', `http-basic.dss-upstream`, 'aws', `${authToken}`], {silent: false});
             break;
     }
