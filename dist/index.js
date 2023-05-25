@@ -54,11 +54,11 @@ async function codeartifact(account, region, codeartifactDomain, codeartifactRep
             await exec.exec('aws', ['--region', 'eu-central-1', 'codeartifact', 'login', '--tool', 'twine', '--domain', codeartifactDomain, '--domain-owner', account, '--repository', codeartifactRepository], {silent: false});
             break;
         case 'poetry':
-            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `https://${indexUrl}`], {silent: false});
-            await exec.exec('poetry', ['config', `http-basic.${codeartifactRepository}`, 'aws', `${authToken}`], {silent: false});
+            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `https://${indexUrl}`], {silent: true});
+            await exec.exec('poetry', ['config', `http-basic.${codeartifactRepository}`, 'aws', `${authToken}`], {silent: true});
 
-            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `https://${extraIndexUrl}`], {silent: false});
-            await exec.exec('poetry', ['config', `http-basic.dss-upstream`, 'aws', `${authToken}`], {silent: false});
+            await exec.exec('poetry', ['config', `repositories.${codeartifactRepository}`, `https://${extraIndexUrl}`], {silent: true});
+            await exec.exec('poetry', ['config', `http-basic.dss-upstream`, 'aws', `${authToken}`], {silent: true});
             break;
     }
 }
@@ -69,6 +69,7 @@ module.exports = run;
 if (require.main === require.cache[eval('__filename')]) {
     run();
 }
+
 
 /***/ }),
 
