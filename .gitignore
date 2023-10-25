@@ -122,3 +122,5 @@ Pipfile.lock
 
 # whitelist
 !dist
+
+*temp
