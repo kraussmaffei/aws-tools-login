@@ -45,38 +45,6 @@ python3 ./aws_tools.py \
 
 ```
 
-#### Powershell
-
-In the meanwhile Powershell is available for many OSes. It is even available on Docker!
-
-For Linux, see <https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-linux?view=powershell-7.3>
-
-For MacOS, see <https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos?view=powershell-7.3>
-
-For Docker, see <https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-in-docker?view=powershell-7.3>
-
-For Windows, see <https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3>
-
-> **Note**
-> You have to install Powershell version >= 7
-
-To perform a login
-
-```pwsh
-./aws-tools-login.ps1 `
-    -AwsProfile <your-aws-profile> `
-    -AwsRegion <your-region> `
-    -SsoStartUrl <the-start-url-of-your-sso> `
-    -CodeArtifactDomain <domain-of-your-codeartifact> `
-    -CodeArtifactDomainOwner <owner-account-of-your-codeartifact>
-```
-
-To perform a login
-
-```pwsh
-./aws-tools-logout.ps1
-```
-
 #### Bash
 
  ``` shell

@@ -52,7 +52,7 @@ class AWSCodeArtifact:
                     "text",
                 ]
             )
-        return self._token
+        return self._token.rstrip("\n")
 
 
 def print_colored(bcolor: bcolors, text: str):
@@ -126,7 +126,7 @@ def configure_pip(args: argparse.Namespace, aws_codeartifact: AWSCodeArtifact):
             "config",
             "set",
             "global.index-url",
-            f"https://aws:{aws_codeartifact.token}@{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss/simple/",
+            f"https://aws:{aws_codeartifact.token}@{args.domain}-{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss/simple/",
         ]
     )
     print(set_index_url_result, end=None)
@@ -137,7 +137,7 @@ def configure_pip(args: argparse.Namespace, aws_codeartifact: AWSCodeArtifact):
             "config",
             "set",
             "global.extra-index-url",
-            f"https://aws:{aws_codeartifact.token}@{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss-upstream/simple/",
+            f"https://aws:{aws_codeartifact.token}@{args.domain}-{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss-upstream/simple/",
         ]
     )
     print(set_extra_index_url_result, end=None)
@@ -153,7 +153,7 @@ def configure_poetry(args: argparse.Namespace, aws_codeartifact: AWSCodeArtifact
             "-vvv",
             "config",
             "repositories.dss",
-            f"https://{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss/simple/",
+            f"https://{args.domain}-{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss/simple/",
         ]
     )
     print(set_index_url_result, end=None)
@@ -168,7 +168,7 @@ def configure_poetry(args: argparse.Namespace, aws_codeartifact: AWSCodeArtifact
             "poetry",
             "config",
             "repositories.dss-upstream",
-            f"https://{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss-upstream/simple/",
+            f"https://{args.domain}-{args.domain_owner}.d.codeartifact.{args.aws_region}.amazonaws.com/pypi/dss-upstream/simple/",
         ]
     )
     print(set_extra_index_url_result, end=None)
@@ -205,7 +205,21 @@ def configure_twine(args: argparse.Namespace):
     print_colored(bcolors.OKGREEN, result)
 
 
-def login(args: argparse.Namespace, aws_codeartifact: AWSCodeArtifact):
+def login(args: argparse.Namespace):
+    tool_exists(
+        name="aws",
+        additional_hint_text="See https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html.",
+    )
+
+    sso_login(args=parsed_args)
+
+    aws_codeartifact = AWSCodeArtifact(
+        aws_profile=parsed_args.aws_profile,
+        aws_region=parsed_args.aws_region,
+        domain=parsed_args.domain,
+        domain_owner=parsed_args.domain_owner,
+    )
+
     if args.ecr:
         ecr_login(args=args)
     if args.pip:
@@ -262,7 +276,7 @@ def twine_logout():
     pypi_rc_path.unlink()
 
 
-def logout(args: argparse.Namespace, aws_codeartifact: AWSCodeArtifact):
+def logout(args: argparse.Namespace):
     if args.ecr:
         ecr_logout(args=args)
     if args.pip:
@@ -359,18 +373,4 @@ def sso_login(args):
 if __name__ == "__main__":
     parsed_args = parse_args(sys.argv[1:])
 
-    tool_exists(
-        name="aws",
-        additional_hint_text="See https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html.",
-    )
-
-    sso_login(args=parsed_args)
-
-    aws_codeartifact = AWSCodeArtifact(
-        aws_profile=parsed_args.aws_profile,
-        aws_region=parsed_args.aws_region,
-        domain=parsed_args.domain,
-        domain_owner=parsed_args.domain_owner,
-    )
-
-    parsed_args.func(parsed_args, aws_codeartifact)
+    parsed_args.func(parsed_args)
