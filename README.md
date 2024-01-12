@@ -2,14 +2,50 @@
 
 A shell script and github action to login / logout kraussmaffei aws codeartifact package and ecr docker repository
 
-# Usage
+## Usage
+
 1. Set up Aws Authorization (e.g. with aws sso [Authorization with sso](#authorization-with-sso))
 2. Login to aws tools (codeartifact, ecr)
     * With Scripts [Scripts usage](#scripts-usage)
     * With Links [Short links usage](#short-links-usage)
 3. Use tools (pip, poetry, docker)
 
-## Scripts usage
+### Scripts usage
+
+#### Python
+
+To perform a login:
+
+```bash
+python3 ./aws_tools.py \
+    --aws-profile <your-aws-profile> \
+    --aws-region <your-region> \
+    --domain <domain-of-your-codeartifact> \
+    --domain-owner-account <owner-account-of-your-codeartifact> \
+    login \
+    --ecr \
+    --pip \
+    --poetry \
+    --twine
+```
+
+To perform a logout:
+
+```bash
+python3 ./aws_tools.py \
+    --aws-profile <your-aws-profile> \
+    --aws-region <your-region> \
+    --domain <domain-of-your-codeartifact> \
+    --domain-owner-account <owner-account-of-your-codeartifact> \
+    logout \
+    --ecr \
+    --pip \
+    --poetry \
+    --twine
+
+```
+
+#### Bash
 
  ``` shell
 $ ./login.sh --help
@@ -25,7 +61,7 @@ $ ./login.sh --help
  ```
 
  ``` shell
-$ ./logout.sh
+./logout.sh
  ```
 
 ## Short links usage
