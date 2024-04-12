@@ -77,17 +77,17 @@ $ ./login.sh --help
 
 ``` shell
 $ aws configure sso                                                                                                                                                       
-SSO start URL [None]: https://d-9967392836.awsapps.com/start#/                                                                                                                                                                         
+SSO start URL [None]: https://kraussmaffei-imm.awsapps.com/start/                                                                                                                                                                         
 SSO Region [None]: eu-central-1                                                                                                                                                                                                        
 There are X AWS accounts available to you.
 Using the account ID 304998364617
 There are X roles available to you.
-Using the role name "DeveloperBase"
+Using the role name "KMDeveloperBasePermSet"
 CLI default client Region [None]: eu-central-1                                                                                                                                                                                         
 CLI default output format [None]: json                                                                                                                                                                                                 
-CLI profile name [DeveloperBase-304998364617]:                                                                                                                                                                                         
+CLI profile name [KMDeveloperBasePermSet-304998364617]:                                                                                                                                                                                         
 
 To use this profile, specify the profile name using --profile, as shown:
 
-aws s3 ls --profile DeveloperBase-304998364617
+aws s3 ls --profile KMDeveloperBasePermSet-304998364617
 ```
