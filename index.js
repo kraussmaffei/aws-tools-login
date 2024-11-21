@@ -75,8 +75,8 @@ async function codeartifact(
   }
   const indexUrl = `${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`;
   const extraIndexUrl = `${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/dss-upstream/simple/`;
-  const npmUrl = `${codeartifactDomain}-${account}.d.codeartifact.${region}.on.aws/npm/${codeartifactRepository}/`;
-
+  const npmUrl = `${codeartifactDomain}-${account}.codeartifact.${region}.on.aws/npm/${codeartifactRepository}/`;
+  
   switch (type) {
     case "pip":
       core.debug(
