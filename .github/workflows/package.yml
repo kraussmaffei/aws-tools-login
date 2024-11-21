@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 name: Lint and Package
 jobs:
@@ -8,11 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
       - name: Package
         run: |
           npm ci
           npm run all
+
       - name: Commit
         run: |
           git config --global user.name "GitHub Actions"

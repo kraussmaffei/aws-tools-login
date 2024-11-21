@@ -168,22 +168,22 @@ async function codeartifact(
         [
           "config",
           "set",
-          `"@${codeartifactDomain}:registry=https://${npmUrl}"`,
+          `@${codeartifactDomain}:registry=https://${npmUrl}`,
           "--location",
           "project",
         ],
-        { silent: false }
+        { silent: true }
       );
       await exec.exec(
         "npm",
         [
           "config",
           "set",
-          `"//${npmUrl}:_authToken=${authToken}"`,
+          `//${npmUrl}:_authToken=${authToken}`,
           "--location",
           "project",
         ],
-        { silent: false }
+        { silent: true }
       );
       break;
   }
