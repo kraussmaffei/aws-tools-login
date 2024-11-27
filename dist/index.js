@@ -81,7 +81,8 @@ async function codeartifact(
   }
   const indexUrl = `${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/${codeartifactRepository}/simple/`;
   const extraIndexUrl = `${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/pypi/dss-upstream/simple/`;
-  const npmUrl = `${codeartifactDomain}-${account}.codeartifact.${region}.on.aws/npm/${codeartifactRepository}/`;
+  const npmUrlIpv4 = `${codeartifactDomain}-${account}.d.codeartifact.${region}.amazonaws.com/npm/${codeartifactRepository}/`;
+  const npmUrlDualstack = `${codeartifactDomain}-${account}.codeartifact.${region}.on.aws/npm/${codeartifactRepository}/`;
   
   switch (type) {
     case "pip":
@@ -174,7 +175,7 @@ async function codeartifact(
         [
           "config",
           "set",
-          `@${codeartifactDomain}:registry=https://${npmUrl}`,
+          `@${codeartifactDomain}:registry=https://${npmUrlIpv4}`,
           "--location",
           "project",
         ],
@@ -185,7 +186,18 @@ async function codeartifact(
         [
           "config",
           "set",
-          `//${npmUrl}:_authToken=${authToken}`,
+          `//${npmUrlIpv4}:_authToken=${authToken}`,
+          "--location",
+          "project",
+        ],
+        { silent: true }
+      );
+      await exec.exec(
+        "npm",
+        [
+          "config",
+          "set",
+          `//${npmUrlDualstack}:_authToken=${authToken}`,
           "--location",
           "project",
         ],
