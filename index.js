@@ -170,8 +170,6 @@ async function codeartifact(
           "config",
           "set",
           `@${codeartifactDomain}:registry=https://${npmUrlIpv4}`,
-          "--location",
-          "project",
         ],
         { silent: true }
       );
@@ -181,8 +179,6 @@ async function codeartifact(
           "config",
           "set",
           `//${npmUrlIpv4}:_authToken=${authToken}`,
-          "--location",
-          "project",
         ],
         { silent: true }
       );
@@ -192,8 +188,6 @@ async function codeartifact(
           "config",
           "set",
           `//${npmUrlDualstack}:_authToken=${authToken}`,
-          "--location",
-          "project",
         ],
         { silent: true }
       );
